@@ -41,9 +41,9 @@ export default function Home() {
       discordLink: "https://discord.com/invite/k6YFMyvG9C",
       githubLink: "https://github.com/joshmin07",
       images: [
-        "/ProjectImage1Menu.png",
-        "/ProjectImage2Save.png",
-        "/ProjectImage3Game.gif"
+        "/JoshMin2k4Website/ProjectImage1Menu.png",
+        "/JoshMin2k4Website/ProjectImage2Save.png",
+        "/JoshMin2k4Website/ProjectImage3Game.gif"
       ]
     },
     {
@@ -73,9 +73,9 @@ export default function Home() {
       description: "I have been passionate about technology ever since I was little, I sparked my interest in programming where I learned to code using Scratch and tinkering with GameMaker Studio. I then decided to take 3D and VR Game Development in Highschool where I learned my first programming language C#. Here I am now! Building a career in this amazing field and learning everyday!",
       technologies: ["Enthusiast", "Learner", "Developer", "Designer", "Creative", "Hardworking"],
       images: [
-        "/AboutMe1.jpg",
-        "/AboutMe2.jpg",
-        "/AboutMe3.jpg"
+        "/JoshMin2k4Website/AboutMe1.jpg",
+        "/JoshMin2k4Website/AboutMe2.jpg",
+        "/JoshMin2k4Website/AboutMe3.jpg"
       ],
     },
   ];
