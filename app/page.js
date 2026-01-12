@@ -1,9 +1,36 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from "./page.module.css";
 
 export default function Home() {
   const [expandedProject, setExpandedProject] = useState(null);
+  const [lightbox, setLightbox] = useState({ isOpen: false, src: '', alt: '' });
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const scrollToProjects = () => {
+    const el = document.getElementById('projects');
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  useEffect(() => {
+    if (!lightbox.isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightbox.isOpen]);
+
+  const openLightbox = (src, alt) => {
+    setIsZoomed(false);
+    setLightbox({ isOpen: true, src, alt });
+  };
+
+  const closeLightbox = () => {
+    setLightbox({ isOpen: false, src: '', alt: '' });
+    setIsZoomed(false);
+  };
 
   const projects = [
     {
@@ -14,9 +41,9 @@ export default function Home() {
       discordLink: "https://discord.com/invite/k6YFMyvG9C",
       githubLink: "https://github.com/joshmin07",
       images: [
-        "/project-placeholder-1.jpg",
-        "/project-placeholder-2.jpg",
-        "/project-placeholder-3.jpg"
+        "/ProjectImage1Menu.png",
+        "/ProjectImage2Save.png",
+        "/ProjectImage3Game.gif"
       ]
     },
     {
@@ -24,15 +51,33 @@ export default function Home() {
       title: "Personal Portfolio Website",
       description: "A modern portfolio website to showcase my projects and skills. Using Next.js for server-side rendering and optimized performance.",
       technologies: ["Next.js", "HTML", "CSS", "JavaScript", "GitHub"],
-      link: "https://github.com/joshmin07/JoshMinerviniPortfolioWebsite"
+      githubLink: "https://github.com/joshmin07/JoshMinerviniPortfolioWebsite",
+      images: [
+
+      ]
     },
     {
       id: 3,
       title: "C, C++, Python, Java, JavaScript projects.",
       description: "Multiple projects and assignments completed during my coursework in various programming languages including C, C++, Python, Java, and scripting languages.",
-      technologies: ["C", "C++", "Python", "Java", "JavaScript"],
-      link: "https://github.com/joshmin07"
-    }
+      technologies: ["C", "C++", "C#", "Python", "Java", "JavaScript"],
+      githubLink: "https://github.com/joshmin07",
+      images: [
+
+
+      ]
+    },
+    {
+      id: 4,
+      title: "More about me!",
+      description: "I have been passionate about technology ever since I was little, I sparked my interest in programming where I learned to code using Scratch and tinkering with GameMaker Studio. I then decided to take 3D and VR Game Development in Highschool where I learned my first programming language C#. Here I am now! Building a career in this amazing field and learning everyday!",
+      technologies: ["Enthusiast", "Learner", "Developer", "Designer", "Creative", "Hardworking"],
+      images: [
+        "/AboutMe1.jpg",
+        "/AboutMe2.jpg",
+        "/AboutMe3.jpg"
+      ],
+    },
   ];
 
   const achievements = [
@@ -40,7 +85,7 @@ export default function Home() {
       id: 1,
       title: "B.S. Undergraduate in Computer Science, University of Central Florida",
       description: "Currently seeking a B.S. in Computer Science at The University of Central Florida. Notable course work: Introduction to C Programming, Introduction to Python Programming, Introduction to C++ programming, Calculus I and II, Discrete Mathematics, Physics with Calculus I.",
-      year: "2025-Present, Expected Graduation date: 2027"
+      year: "2025-Present"
     },
     {
       id: 2,
@@ -58,6 +103,26 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      {lightbox.isOpen && (
+        <div className={styles.lightboxOverlay} role="dialog" aria-modal="true" aria-label="Media preview">
+          <div className={`${styles.lightboxContent} ${isZoomed ? styles.lightboxContentZoomed : ''}`}>
+            <button type="button" className={styles.lightboxClose} onClick={closeLightbox} aria-label="Close preview">
+              <svg className={styles.lightboxCloseIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M6 6l12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+            <div className={styles.lightboxImageContainer}>
+              <img
+                src={lightbox.src}
+                alt={lightbox.alt}
+                className={`${styles.lightboxImage} ${isZoomed ? styles.lightboxImageZoomed : ''}`}
+                onClick={() => setIsZoomed((z) => !z)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
@@ -93,7 +158,11 @@ export default function Home() {
           <h2 className={styles.sectionTitle}>Projects</h2>
           <div className={styles.grid}>
             {projects.map((project) => (
-              <div key={project.id} className={`${styles.card} ${expandedProject === project.id ? styles.cardExpanded : ''}`}>
+              <div
+                key={project.id}
+                id={`project-${project.id}`}
+                className={`${styles.card} ${expandedProject === project.id ? styles.cardExpanded : ''}`}
+              >
                 <h3 className={styles.cardTitle}>{project.title}</h3>
                 <p className={styles.cardDescription}>{project.description}</p>
                 <div className={styles.technologies}>
@@ -107,7 +176,12 @@ export default function Home() {
                     <div className={styles.projectImages}>
                       {project.images.map((image, index) => (
                         <div key={index} className={styles.imageWrapper}>
-                          <img src={image} alt={`${project.title} screenshot ${index + 1}`} className={styles.projectImage} />
+                          <img
+                            src={image}
+                            alt={`${project.title} screenshot ${index + 1}`}
+                            className={styles.projectImage}
+                            onClick={() => openLightbox(image, `${project.title} screenshot ${index + 1}`)}
+                          />
                         </div>
                       ))}
                     </div>
@@ -135,7 +209,20 @@ export default function Home() {
                 )}
                 
                 <button 
-                  onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                  onClick={() => {
+                    const isClosing = expandedProject === project.id;
+                    const nextExpanded = isClosing ? null : project.id;
+                    setExpandedProject(nextExpanded);
+                    if (isClosing) {
+                      requestAnimationFrame(scrollToProjects);
+                      return;
+                    }
+                    requestAnimationFrame(() => {
+                      const card = document.getElementById(`project-${project.id}`);
+                      if (!card) return;
+                      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                  }}
                   className={styles.cardLink}
                 >
                   {expandedProject === project.id ? 'Hide Details ↑' : 'View Project →'}
@@ -181,7 +268,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <p>© 2025 Josh Minervini. All rights reserved.</p>
+        <p>© 2026 Josh Minervini. All rights reserved.</p>
       </footer>
     </div>
   );

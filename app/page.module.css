@@ -205,26 +205,96 @@
 }
 
 .imageWrapper {
-  position: relative;
   width: 100%;
-  padding-bottom: 75%;
   background: rgba(102, 126, 234, 0.05);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .projectImage {
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   transition: transform 0.3s ease;
+  cursor: zoom-in;
 }
 
 .projectImage:hover {
   transform: scale(1.05);
+}
+
+/* Lightbox */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.lightboxContent {
+  position: relative;
+  display: inline-block;
+  max-width: min(1200px, 92vw);
+  max-height: 82vh;
+  background: transparent;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.25);
+  overflow: hidden;
+}
+
+.lightboxContentZoomed {
+  width: min(1200px, 92vw);
+  height: 82vh;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.35);
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.lightboxCloseIcon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.lightboxImageContainer {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  display: block;
+}
+
+.lightboxImage {
+  display: block;
+  max-width: min(1200px, 92vw);
+  max-height: 82vh;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+.lightboxImageZoomed {
+  width: 200%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  cursor: zoom-out;
 }
 
 .projectLinks {
@@ -247,28 +317,19 @@
 }
 
 .projectLinkButton:hover {
-.contactButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  background: #667eea;
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.contactButton:hover {
   background: #764ba2;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
 
-.contactIcon {
-  width: 24px;
-  height: 24px;
-} flex-direction: column;
+.linkIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.achievementsList {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   max-width: 900px;
   margin: 0 auto;

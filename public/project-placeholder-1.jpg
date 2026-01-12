@@ -1,6 +1,0 @@
-<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="600" fill="#667eea"/>
-  <text x="400" y="280" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle">Moonveil Studios</text>
-  <text x="400" y="330" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" opacity="0.9">Project Screenshot 1</text>
-  <text x="400" y="370" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.7">Replace with actual game screenshot</text>
-</svg>
