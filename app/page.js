@@ -341,11 +341,12 @@ export default function Home() {
                       requestAnimationFrame(scrollToProjects);
                       return;
                     }
-                    requestAnimationFrame(() => {
+                    // Wait for expansion to progress, then scroll during animation
+                    setTimeout(() => {
                       const card = document.getElementById(`project-${project.id}`);
                       if (!card) return;
                       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    });
+                    }, 250);
                   }}
                   className={styles.cardLink}
                 >
