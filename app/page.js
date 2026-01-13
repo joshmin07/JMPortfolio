@@ -122,9 +122,9 @@ export default function Home() {
       discordLink: "https://discord.com/invite/k6YFMyvG9C",
       githubLink: "https://github.com/joshmin07",
       images: [
-        "/JMPortfolio/ProjectImage1Menu.png",
-        "/JMPortfolio/ProjectImage2Save.png",
-        "/JMPortfolio/ProjectImage3Game.gif"
+        "/ProjectImage1Menu.png",
+        "/ProjectImage2Save.png",
+        "/ProjectImage3Game.gif"
       ]
     },
     {
@@ -154,9 +154,9 @@ export default function Home() {
       description: "I have been passionate about technology ever since I was little, I sparked my interest in programming where I learned to code using Scratch and tinkering with GameMaker Studio. I then decided to take 3D and VR Game Development in Highschool where I learned my first programming language C#. Here I am now! Building a career in this amazing field and learning everyday!",
       technologies: ["Enthusiast", "Learner", "Developer", "Designer", "Creative", "Hardworking"],
       images: [
-        "/JMPortfolio/AboutMe1.jpg",
-        "/JMPortfolio/AboutMe2.jpg",
-        "/JMPortfolio/AboutMe3.jpg"
+        "/AboutMe1.jpg",
+        "/AboutMe2.jpg",
+        "/AboutMe3.jpg"
       ],
     },
   ];
@@ -199,6 +199,7 @@ export default function Home() {
                 alt={lightbox.alt}
                 className={`${styles.lightboxImage} ${isZoomed ? styles.lightboxImageZoomed : ''}`}
                 onClick={() => setIsZoomed((z) => !z)}
+                decoding="async"
               />
             </div>
           </div>
@@ -206,6 +207,15 @@ export default function Home() {
       )}
       {/* Hero Section */}
       <section className={styles.hero}>
+        <video 
+          className={styles.heroVideo}
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+        >
+          <source src="/Galaxy.mp4" type="video/mp4" />
+        </video>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Josh Minervini</h1>
           <p className={styles.heroSubtitle}>Game/Web Developer & Designer</p>
@@ -298,16 +308,21 @@ export default function Home() {
                 {expandedProject === project.id && project.images && (
                   <div className={styles.projectDetails}>
                     <div className={styles.projectImages}>
-                      {project.images.map((image, index) => (
-                        <div key={index} className={styles.imageWrapper}>
-                          <img
-                            src={image}
-                            alt={`${project.title} screenshot ${index + 1}`}
-                            className={styles.projectImage}
-                            onClick={() => openLightbox(image, `${project.title} screenshot ${index + 1}`)}
-                          />
-                        </div>
-                      ))}
+                      {project.images.map((image, index) => {
+                        const isGif = image.toLowerCase().endsWith('.gif');
+                        return (
+                          <div key={index} className={styles.imageWrapper}>
+                            <img
+                              src={image}
+                              alt={`${project.title} screenshot ${index + 1}`}
+                              className={styles.projectImage}
+                              onClick={() => openLightbox(image, `${project.title} screenshot ${index + 1}`)}
+                              loading="lazy"
+                              decoding={isGif ? "async" : "auto"}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                     {(project.discordLink || project.githubLink) && (
                       <div className={styles.projectLinks}>
