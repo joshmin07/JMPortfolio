@@ -122,9 +122,9 @@ export default function Home() {
       discordLink: "https://discord.com/invite/k6YFMyvG9C",
       githubLink: "https://github.com/joshmin07",
       images: [
-        "/ProjectImage1Menu.png",
-        "/ProjectImage2Save.png",
-        "/ProjectImage3Game.gif"
+        "/JMPortfolio/ProjectImage1Menu.png",
+        "/JMPortfolio/ProjectImage2Save.png",
+        "/JMPortfolio/ProjectImage3Game.gif"
       ]
     },
     {
@@ -154,9 +154,9 @@ export default function Home() {
       description: "I have been passionate about technology ever since I was little, I sparked my interest in programming where I learned to code using Scratch and tinkering with GameMaker Studio. I then decided to take 3D and VR Game Development in Highschool where I learned my first programming language C#. Here I am now! Building a career in this amazing field and learning everyday!",
       technologies: ["Enthusiast", "Learner", "Developer", "Designer", "Creative", "Hardworking"],
       images: [
-        "/AboutMe1.jpg",
-        "/AboutMe2.jpg",
-        "/AboutMe3.jpg"
+        "/JMPortfolio/AboutMe1.jpg",
+        "/JMPortfolio/AboutMe2.jpg",
+        "/JMPortfolio/AboutMe3.jpg"
       ],
     },
   ];
@@ -214,7 +214,7 @@ export default function Home() {
           muted 
           playsInline
         >
-          <source src="/Galaxy.mp4" type="video/mp4" />
+          <source src="/JMPortfolio/Galaxy.mp4" type="video/mp4" />
         </video>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Josh Minervini</h1>

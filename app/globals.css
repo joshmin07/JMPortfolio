@@ -1,7 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --hero-bg: url('/HeaderBG.jpg');
+  --hero-bg: url('/JMPortfolio/HeaderBG.jpg');
   --sticky-nav-height: 64px;
 }
 
