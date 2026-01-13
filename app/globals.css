@@ -1,6 +1,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --hero-bg: url('/JoshMin2k4Website/HeaderBG.jpg');
+  --sticky-nav-height: 64px;
 }
 
 @media (prefers-color-scheme: dark) {

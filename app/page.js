@@ -1,11 +1,33 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from "./page.module.css";
+
+// Customizable navigation tabs - edit these to add/remove/reorder tabs
+const NAV_TABS = [
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'achievements', label: 'Achievements' },
+  { id: 'contact', label: 'Contact' },
+];
 
 export default function Home() {
   const [expandedProject, setExpandedProject] = useState(null);
   const [lightbox, setLightbox] = useState({ isOpen: false, src: '', alt: '' });
   const [isZoomed, setIsZoomed] = useState(false);
+  const [activeSection, setActiveSection] = useState('about');
+  const [isNavFixed, setIsNavFixed] = useState(false);
+  const navSentinelRef = useRef(null);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setActiveSection(id);
+    // Keep URL in sync without forcing an instant jump.
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      window.history.replaceState(null, '', `#${id}`);
+    }
+  };
 
   const scrollToProjects = () => {
     const el = document.getElementById('projects');
@@ -21,6 +43,65 @@ export default function Home() {
       document.body.style.overflow = previousOverflow;
     };
   }, [lightbox.isOpen]);
+
+  useEffect(() => {
+    const ids = NAV_TABS.map((t) => t.id);
+    const sectionEls = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    if (sectionEls.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const best = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
+        if (best?.target?.id) setActiveSection(best.target.id);
+      },
+      {
+        root: null,
+        threshold: [0.15, 0.25, 0.35, 0.5, 0.65],
+        // Bias toward the section near the top portion of the screen.
+        rootMargin: '-15% 0px -70% 0px',
+      }
+    );
+
+    sectionEls.forEach((el) => observer.observe(el));
+
+    const syncFromHash = () => {
+      const id = window.location.hash?.slice(1);
+      if (id && ids.includes(id)) setActiveSection(id);
+    };
+
+    window.addEventListener('hashchange', syncFromHash);
+    syncFromHash();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('hashchange', syncFromHash);
+    };
+    // tabs is stable enough here (constant array content)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const sentinel = navSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Only fix when the sentinel has scrolled ABOVE the viewport.
+        // If it's below the viewport (initial load), don't fix.
+        const shouldFix = !entry.isIntersecting && (entry.boundingClientRect?.top ?? 0) < 0;
+        setIsNavFixed(shouldFix);
+      },
+      { root: null, threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   const openLightbox = (src, alt) => {
     setIsZoomed(false);
@@ -132,11 +213,54 @@ export default function Home() {
             Welcome to my portfolio! I'm Josh Minervini, a passionate developer specializing in Game Development and Web Development. Explore my projects and get in touch!
           </p>
           <div className={styles.heroButtons}>
-            <a href="#projects" className={styles.primaryButton}>View Projects</a>
-            <a href="#contact" className={styles.secondaryButton}>Contact Me</a>
+            <a
+              href="#projects"
+              className={styles.primaryButton}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('projects');
+              }}
+            >
+              View Projects
+            </a>
+            <a
+              href="#contact"
+              className={styles.secondaryButton}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('contact');
+              }}
+            >
+              Contact Me
+            </a>
           </div>
         </div>
       </section>
+
+      <div ref={navSentinelRef} className={styles.navSentinel} aria-hidden="true" />
+      <div className={styles.stickyNavSlot}>
+        <nav
+          className={`${styles.stickyNav} ${isNavFixed ? styles.stickyNavFixed : ''}`}
+          aria-label="Section navigation"
+        >
+          <div className={styles.stickyNavInner}>
+            {NAV_TABS.map((tab) => (
+              <a
+                key={tab.id}
+                href={`#${tab.id}`}
+                className={`${styles.tabLink} ${activeSection === tab.id ? styles.tabLinkActive : ''}`}
+                aria-current={activeSection === tab.id ? 'page' : undefined}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(tab.id);
+                }}
+              >
+                {tab.label}
+              </a>
+            ))}
+          </div>
+        </nav>
+      </div>
 
       {/* About Section */}
       <section className={styles.section} id="about">
